@@ -198,8 +198,10 @@ export class DrawPass {
                 const dpoitTextures = this.dpoit.bindDualDepthPeeling();
                 renderer.renderDpoitTransparent(scene.primitives, camera, this.depthTextureOpaque, dpoitTextures);
 
-                target.bind();
-                this.dpoit.renderBlendBack();
+                if (iterations > 1) {
+                    target.bind();
+                    this.dpoit.renderBlendBack();
+                }
                 if (isTimingMode) this.webgl.timer.markEnd('DpoitPass.layer');
             }
 
@@ -429,6 +431,11 @@ export class DrawPass {
         }
         if (helper.handle.isEnabled) {
             renderer.renderBlended(helper.handle.scene, camera);
+        }
+        if (helper.pointer.isEnabled) {
+            helper.pointer.setCamera(camera);
+            renderer.update(helper.pointer.camera, helper.pointer.scene);
+            renderer.renderBlended(helper.pointer.scene, helper.pointer.camera);
         }
         if (helper.camera.isEnabled) {
             helper.camera.update(camera);

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018-2024 mol* contributors, licensed under MIT, See LICENSE file for more info.
+ * Copyright (c) 2018-2025 mol* contributors, licensed under MIT, See LICENSE file for more info.
  *
  * @author David Sehnal <david.sehnal@gmail.com>
  * @author Alexander Rose <alexander.rose@weirdbyte.de>
@@ -23,7 +23,8 @@ const Key = Binding.TriggerKey;
 export const DefaultClickResetCameraOnEmpty = Binding([
     Trigger(B.Flag.Primary, M.create()),
     Trigger(B.Flag.Secondary, M.create()),
-    Trigger(B.Flag.Primary, M.create({ control: true }))
+    Trigger(B.Flag.Primary, M.create({ control: true })),
+    Trigger(B.Flag.Trigger),
 ], 'Reset camera focus', 'Click on nothing using ${triggers}');
 export const DefaultClickResetCameraOnEmptySelectMode = Binding([
     Trigger(B.Flag.Secondary, M.create()),
@@ -40,7 +41,8 @@ export const DefaultFocusLociBindings: FocusLociBindings = {
     clickCenterFocus: Binding([
         Trigger(B.Flag.Primary, M.create()),
         Trigger(B.Flag.Secondary, M.create()),
-        Trigger(B.Flag.Primary, M.create({ control: true }))
+        Trigger(B.Flag.Primary, M.create({ control: true })),
+        Trigger(B.Flag.Trigger),
     ], 'Camera center and focus', 'Click element using ${triggers}'),
     clickCenterFocusSelectMode: Binding([
         Trigger(B.Flag.Secondary, M.create()),
@@ -76,6 +78,13 @@ export const FocusLoci = PluginBehavior.create<FocusLociProps>({
 
                 if (Loci.isEmpty(current.loci) && Binding.match(resetBinding, button, modifiers)) {
                     PluginCommands.Camera.Reset(this.ctx, { });
+                    return;
+                }
+
+                // Prevent when interaction props are set
+                const snapshotKey = current.repr?.props?.snapshotKey?.trim() ?? '';
+                const markdownCommands = current.repr?.props?.markdownCommands;
+                if (snapshotKey || (typeof markdownCommands === 'object' && Object.keys(markdownCommands).length > 0)) {
                     return;
                 }
 

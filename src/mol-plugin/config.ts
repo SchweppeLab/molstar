@@ -52,6 +52,7 @@ export const PluginConfig = {
         EmdbHeaderServer: item('volume-streaming.emdb-header-server', 'https://files.wwpdb.org/pub/emdb/structures'),
     },
     Viewport: {
+        ShowReset: item('viewer.show-reset-button', true),
         ShowExpand: item('viewer.show-expand-button', true),
         ShowControls: item('viewer.show-controls-button', true),
         ShowSettings: item('viewer.show-settings-button', true),
@@ -59,6 +60,7 @@ export const PluginConfig = {
         ShowAnimation: item('viewer.show-animation-button', true),
         ShowTrajectoryControls: item('viewer.show-trajectory-controls', true),
         ShowScreenshotControls: item('viewer.show-screenshot-controls', true),
+        ShowXR: item('viewer.show-xr', true),
     },
     Download: {
         DefaultPdbProvider: item<PdbDownloadProvider>('download.default-pdb-provider', 'pdbe'),

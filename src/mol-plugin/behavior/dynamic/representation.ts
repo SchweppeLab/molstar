@@ -241,6 +241,7 @@ export const DefaultLociLabelProvider = PluginBehavior.create({
 export const DefaultFocusLociBindings = {
     clickFocus: Binding([
         Trigger(B.Flag.Primary, M.create()),
+        Trigger(B.Flag.Trigger),
     ], 'Representation Focus', 'Click element using ${triggers}'),
     clickFocusAdd: Binding([
         Trigger(B.Flag.Primary, M.create({ control: true })),
@@ -288,6 +289,15 @@ export const FocusLoci = PluginBehavior.create<FocusLociProps>({
                 if (!this.ctx.selectionMode && matched && snapshotKey) {
                     this.ctx.managers.snapshot.applyKey(snapshotKey);
                     return;
+                }
+
+                // Support executing markdown commands associated with a visual
+                const markdownCommands = current.repr?.props?.markdownCommands;
+                if (!this.ctx.selectionMode && matched && typeof markdownCommands === 'object') {
+                    if (Object.keys(markdownCommands).length > 0) {
+                        this.ctx.managers.markdownExtensions.tryExecute('click', markdownCommands);
+                        return;
+                    }
                 }
 
                 // only apply structure focus for appropriate granularity

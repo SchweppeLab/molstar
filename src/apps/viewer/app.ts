@@ -109,8 +109,10 @@ const DefaultViewerOptions = {
     resolutionMode: PluginConfig.General.ResolutionMode.defaultValue,
     illumination: false,
 
-    viewportShowExpand: PluginConfig.Viewport.ShowExpand.defaultValue,
+    viewportShowReset: PluginConfig.Viewport.ShowReset.defaultValue,
+    viewportShowScreenshotControls: PluginConfig.Viewport.ShowScreenshotControls.defaultValue,
     viewportShowControls: PluginConfig.Viewport.ShowControls.defaultValue,
+    viewportShowExpand: PluginConfig.Viewport.ShowExpand.defaultValue,
     viewportShowSettings: PluginConfig.Viewport.ShowSettings.defaultValue,
     viewportShowSelectionMode: PluginConfig.Viewport.ShowSelectionMode.defaultValue,
     viewportShowAnimation: PluginConfig.Viewport.ShowAnimation.defaultValue,
@@ -187,8 +189,10 @@ export class Viewer {
                 [PluginConfig.General.AllowMajorPerformanceCaveat, o.allowMajorPerformanceCaveat],
                 [PluginConfig.General.PowerPreference, o.powerPreference],
                 [PluginConfig.General.ResolutionMode, o.resolutionMode],
-                [PluginConfig.Viewport.ShowExpand, o.viewportShowExpand],
+                [PluginConfig.Viewport.ShowReset, o.viewportShowReset],
+                [PluginConfig.Viewport.ShowScreenshotControls, o.viewportShowScreenshotControls],
                 [PluginConfig.Viewport.ShowControls, o.viewportShowControls],
+                [PluginConfig.Viewport.ShowExpand, o.viewportShowExpand],
                 [PluginConfig.Viewport.ShowSettings, o.viewportShowSettings],
                 [PluginConfig.Viewport.ShowSelectionMode, o.viewportShowSelectionMode],
                 [PluginConfig.Viewport.ShowAnimation, o.viewportShowAnimation],
@@ -536,7 +540,7 @@ export class Viewer {
     /** Load MolViewSpec from `data`.
      * If `format` is 'mvsj', `data` must be a string or a Uint8Array containing a UTF8-encoded string.
      * If `format` is 'mvsx', `data` must be a Uint8Array or a string containing base64-encoded binary data prefixed with 'base64,'. */
-    loadMvsData(data: string | Uint8Array, format: 'mvsj' | 'mvsx', options?: { appendSnapshots?: boolean, keepCamera?: boolean, extensions?: MolstarLoadingExtension<any>[] }) {
+    loadMvsData(data: string | Uint8Array<ArrayBuffer>, format: 'mvsj' | 'mvsx', options?: { appendSnapshots?: boolean, keepCamera?: boolean, extensions?: MolstarLoadingExtension<any>[] }) {
         return loadMVSData(this.plugin, data, format, options);
     }
 
@@ -580,12 +584,12 @@ export interface VolumeIsovalueInfo {
 
 export interface LoadTrajectoryParams {
     model: { kind: 'model-url', url: string, format?: BuiltInTrajectoryFormat /* mmcif */, isBinary?: boolean }
-    | { kind: 'model-data', data: string | number[] | ArrayBuffer | Uint8Array, format?: BuiltInTrajectoryFormat /* mmcif */ }
+    | { kind: 'model-data', data: string | number[] | ArrayBuffer | Uint8Array<ArrayBuffer>, format?: BuiltInTrajectoryFormat /* mmcif */ }
     | { kind: 'topology-url', url: string, format: BuiltInTopologyFormat, isBinary?: boolean }
-    | { kind: 'topology-data', data: string | number[] | ArrayBuffer | Uint8Array, format: BuiltInTopologyFormat },
+    | { kind: 'topology-data', data: string | number[] | ArrayBuffer | Uint8Array<ArrayBuffer>, format: BuiltInTopologyFormat },
     modelLabel?: string,
     coordinates: { kind: 'coordinates-url', url: string, format: BuiltInCoordinatesFormat, isBinary?: boolean }
-    | { kind: 'coordinates-data', data: string | number[] | ArrayBuffer | Uint8Array, format: BuiltInCoordinatesFormat },
+    | { kind: 'coordinates-data', data: string | number[] | ArrayBuffer | Uint8Array<ArrayBuffer>, format: BuiltInCoordinatesFormat },
     coordinatesLabel?: string,
     preset?: keyof PresetTrajectoryHierarchy
 }
